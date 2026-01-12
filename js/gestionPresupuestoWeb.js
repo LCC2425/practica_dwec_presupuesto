@@ -342,29 +342,51 @@ export function filtrarGastosWeb(event) {
     let formulario = event.currentTarget;
 
     let valorMinimo = formulario["formulario-filtrado-valor-minimo"].value;
+    if(valorMinimo === ""){
+        valorMinimo = null;
+    }else{
+        valorMinimo = Number(valorMinimo);
+    }
     let valorMaximo = formulario["formulario-filtrado-valor-maximo"].value;
-    let descripcion = formulario["formulario-filtrado-descripcion"].value;
+    if(valorMaximo === ""){
+        valorMaximo = null;
+    }else{
+        valorMaximo = Number(valorMaximo);
+    }
+    let descripcionContiene = formulario["formulario-filtrado-descripcion"].value;
+    if (descripcionContiene === "") {
+        descripcionContiene = null;
+    }
     let fechaDesde = formulario["formulario-filtrado-fecha-desde"].value;
+    if (fechaDesde === "") {
+        fechaDesde = null;
+    }
     let fechaHasta = formulario["formulario-filtrado-fecha-hasta"].value;
+    if (fechaHasta === "") {
+        fechaHasta = null;
+    }
 
     let textoEtiquetas = formulario["formulario-filtrado-etiquetas-tiene"].value;
     let etiquetasTiene;
     if (textoEtiquetas !== "") {
-        etiquetasTiene = transformarListadoEtiquetas(textoEtiquetas);
+        etiquetasTiene = gestionPresupuesto.transformarListadoEtiquetas(textoEtiquetas);
     }
 
     let formularioFiltrado = {
         valorMinimo,
         valorMaximo,
-        descripcion,
+        descripcionContiene,
         fechaDesde,
         fechaHasta,
         etiquetasTiene
     };
 
-    let gastosFiltrados = filtrarGastos(formularioFiltrado);
+    let gastosFiltrados = gestionPresupuesto.filtrarGastos(formularioFiltrado);
 
-    mostrarGastoWeb(gastosFiltrados);
+    document.getElementById("listado-gastos-completo").innerHTML = "";
+    for (let gasto of gastosFiltrados) {
+        mostrarGastoWeb("listado-gastos-completo", gasto);
+    }
 }
  
 
