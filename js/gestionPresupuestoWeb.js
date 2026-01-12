@@ -388,6 +388,33 @@ export function filtrarGastosWeb(event) {
         mostrarGastoWeb("listado-gastos-completo", gasto);
     }
 }
+
+export function guardarGastosWeb() {
+
+    let gastos = gestionPresupuesto.listarGastos();
+
+    let gastosJson = JSON.stringify(gastos);
+
+    localStorage.setItem("GestorGastosDWEC", gastosJson);
+}
+
+export function cargarGastosWeb() {
+
+    let gastos = localStorage.getItem("GestorGastosDWEC");
+
+    if (gastos !== null) {
+
+        let gastosJson = JSON.parse(gastos);
+
+        gestionPresupuesto.cargarGastos(gastosJson);
+
+    } else {
+
+        gestionPresupuesto.cargarGastos([]);
+    }
+
+    repintar();
+}
  
 
 let botonPresupuesto = document.getElementById("actualizarpresupuesto");
@@ -401,3 +428,9 @@ botonGastoForm.addEventListener("click", nuevoGastoWebFormulario);
 
 let botonSubmit = document.getElementById("formulario-filtrado");
 botonSubmit.addEventListener("submit", filtrarGastosWeb);
+
+let botonGuardar = document.getElementById("guardar-gastos");
+botonGuardar.addEventListener("click", guardarGastosWeb);
+
+let botonCargar = document.getElementById("cargar-gastos");
+botonCargar.addEventListener("click", cargarGastosWeb);
