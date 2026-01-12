@@ -335,6 +335,37 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
 
     return editarformulario; 
 } 
+
+export function filtrarGastosWeb(event) {
+    event.preventDefault();
+
+    let formulario = event.currentTarget;
+
+    let valorMinimo = formulario["formulario-filtrado-valor-minimo"].value;
+    let valorMaximo = formulario["formulario-filtrado-valor-maximo"].value;
+    let descripcion = formulario["formulario-filtrado-descripcion"].value;
+    let fechaDesde = formulario["formulario-filtrado-fecha-desde"].value;
+    let fechaHasta = formulario["formulario-filtrado-fecha-hasta"].value;
+
+    let textoEtiquetas = formulario["formulario-filtrado-etiquetas-tiene"].value;
+    let etiquetasTiene;
+    if (textoEtiquetas !== "") {
+        etiquetasTiene = transformarListadoEtiquetas(textoEtiquetas);
+    }
+
+    let formularioFiltrado = {
+        valorMinimo,
+        valorMaximo,
+        descripcion,
+        fechaDesde,
+        fechaHasta,
+        etiquetasTiene
+    };
+
+    let gastosFiltrados = filtrarGastos(formularioFiltrado);
+
+    mostrarGastoWeb(gastosFiltrados);
+}
  
 
 let botonPresupuesto = document.getElementById("actualizarpresupuesto");
@@ -345,3 +376,6 @@ botonGasto.addEventListener("click", nuevoGastoWeb);
 
 let botonGastoForm = document.getElementById("anyadirgasto-formulario");
 botonGastoForm.addEventListener("click", nuevoGastoWebFormulario);
+
+let botonSubmit = document.getElementById("formulario-filtrado");
+botonSubmit.addEventListener("submit", filtrarGastosWeb);
