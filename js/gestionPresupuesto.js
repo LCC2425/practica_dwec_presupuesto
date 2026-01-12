@@ -130,6 +130,10 @@ function agruparGastos(periodo = "mes", etiquetas, fechaDesde, fechaHasta) {
         return acumulacionTotal;
 }
 
+function transformarListadoEtiquetas(texto){
+    let resultado = texto.split(/[ ,.;:]+/).filter(texto => texto.length > 0);
+    return resultado;
+}
 
 function CrearGasto(descripcion, valor, fecha, ...etiquetas) {
     this.descripcion = descripcion;
@@ -249,5 +253,6 @@ export   {
     calcularTotalGastos,
     calcularBalance,
     filtrarGastos,
-    agruparGastos
-}
+    agruparGastos,
+    transformarListadoEtiquetas
+};
