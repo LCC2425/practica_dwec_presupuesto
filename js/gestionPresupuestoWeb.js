@@ -415,7 +415,7 @@ export function cargarGastosWeb() {
 
     repintar();
 }
- 
+
 
 let botonPresupuesto = document.getElementById("actualizarpresupuesto");
 botonPresupuesto.addEventListener("click", actualizarPresupuestoWeb);
