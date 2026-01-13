@@ -340,8 +340,42 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
         }
     };
 
+    let editarGastoApi = {
+    gastoActual: gasto,
+    handleEvent: async function (evt) {
+        evt.preventDefault();
+
+        let nombreUsuario = document.getElementById("nombre_usuario").value;
+
+        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/"+ nombreUsuario + "/gastos/" + this.gastoActual.id;
+
+        let datos = {
+            descripcion: formulario.descripcion.value,
+            valor: Number(formulario.valor.value),
+            fecha: formulario.fecha.value,
+            etiquetas: formulario.etiquetas.value.split(",")
+        };
+
+        await fetch(url, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos)
+        });
+
+        formulario.remove();
+
+        if (botonEditarElFormulario) {
+            botonEditarElFormulario.removeAttribute("disabled");
+        }
+        
+        cargarGastosApi();
+    }
+};
+
     formulario.addEventListener("submit", editarGasto);
-    formulario.querySelector("button.cancelar").addEventListener("click", borrarFormulario); 
+    formulario.querySelector("button.cancelar").addEventListener("click", borrarFormulario);
+    formulario.querySelector(".gasto-enviar-api").addEventListener("click", editarGastoApi);
+
 
     let formularioExistente = divPrincipal.querySelector("form");
     if (formularioExistente){
