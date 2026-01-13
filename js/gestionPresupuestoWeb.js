@@ -416,6 +416,21 @@ export function cargarGastosWeb() {
     repintar();
 }
 
+async function cargarGastosApi() {
+    
+    let nombreUsuario = document.getElementById("nombre_usuario").value;
+ 
+    let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario + "/gastos";
+
+    let respuesta = await fetch(url);
+
+    let gastos = await respuesta.json();
+
+    gestionPresupuesto.cargarGastos(gastos);
+
+    repintar();
+}
+
 
 let botonPresupuesto = document.getElementById("actualizarpresupuesto");
 botonPresupuesto.addEventListener("click", actualizarPresupuestoWeb);
