@@ -74,7 +74,7 @@ export function mostrarGastoWeb(idElemento, gasto) {
 
             let nombreUsuario = document.getElementById("nombre_usuario").value;
 
-            let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario + "/gastos/" + gasto.id;
+            let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario  + "/" + gasto.id;
 
             await fetch(url, { method: "DELETE" });
 
@@ -264,6 +264,39 @@ function nuevoGastoWebFormulario(){
     }}
 
     formulario.querySelector("button.cancelar").addEventListener("click", borrarFormulario);
+
+    let botonEnviarApi = formulario.querySelector(".gasto-enviar-api");
+botonEnviarApi.addEventListener("click", async function(event) {
+        event.preventDefault();
+
+        let nombreUsuario = document.getElementById("nombre_usuario").value;
+    
+        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario;
+ 
+        let formulario = event.target.form;
+
+        let descripcion = formulario.descripcion.value;
+        let valor = Number(formulario.valor.value);
+        let fecha = formulario.fecha.value;       
+        let etiquetas = formulario.etiquetas.value.split(",");
+
+
+        let datos = {
+            descripcion: descripcion,
+            valor: valor,
+            fecha: fecha,
+            etiquetas: etiquetas
+        };
+
+        await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            });
+
+            cargarGastosApi();
+    });
+
     
     let controles = document.getElementById("controlesprincipales");
     controles.appendChild(formulario);
@@ -347,7 +380,7 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
 
         let nombreUsuario = document.getElementById("nombre_usuario").value;
 
-        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/"+ nombreUsuario + "/gastos/" + this.gastoActual.id;
+        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/"+ nombreUsuario  + "/" + this.gastoActual.id;
 
         let datos = {
             descripcion: formulario.descripcion.value,
@@ -367,7 +400,7 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
         if (botonEditarElFormulario) {
             botonEditarElFormulario.removeAttribute("disabled");
         }
-        
+
         cargarGastosApi();
     }
 };
@@ -473,13 +506,20 @@ async function cargarGastosApi() {
     
     let nombreUsuario = document.getElementById("nombre_usuario").value;
  
-    let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario + "/gastos";
+    let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario;
 
     let respuesta = await fetch(url);
 
+    if(!respuesta.ok){
     let gastos = await respuesta.json();
-
-    gestionPresupuesto.cargarGastos(gastos);
+    }
+    let gastosRehidratados = gastos.map(g => {
+        let gasto = new gestionPresupuesto.CrearGasto();
+        Object.assign(gasto, g);
+        return gasto;
+    });
+    
+    gestionPresupuesto.cargarGastos(gastosRehidratados);
 
     repintar();
 }
@@ -504,37 +544,5 @@ botonGuardar.addEventListener("click", guardarGastosWeb);
 let botonCargar = document.getElementById("cargar-gastos");
 botonCargar.addEventListener("click", cargarGastosWeb);
 
-let botonCargarApi = document.getElementById("cargar-gastos-apis");
+let botonCargarApi = document.getElementById("cargar-gastos-api");
 botonCargarApi.addEventListener("click", cargarGastosApi);
-
-let botonEnviarApi = document.querySelector(".gasto-enviar-api");
-botonEnviarApi.addEventListener("click", async function(event) {
-        event.preventDefault();
-
-        let nombreUsuario = document.getElementById("nombre_usuario").value;
-    
-        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario + "/gastos";
- 
-        let formulario = event.target.form;
-
-        let descripcion = formulario.descripcion.value;
-        let valor = Number(formulario.valor.value);
-        let fecha = formulario.fecha.value;       
-        let etiquetas = formulario.etiquetas.value.split(",");
-
-
-        let datos = {
-            descripcion: descripcion,
-            valor: valor,
-            fecha: fecha,
-            etiquetas: etiquetas
-        };
-
-        await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(datos)
-            });
-
-            cargarGastosApi();
-    });
