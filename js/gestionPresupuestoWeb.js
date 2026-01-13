@@ -65,6 +65,15 @@ export function mostrarGastoWeb(idElemento, gasto) {
         botonBorrar.addEventListener("click", borrarGasto);
         divPrincipal.append(botonBorrar);
 
+        let botonBorrarApi = document.createElement("button");
+        botonBorrar.textContent = "Borrar (API)";
+        botonBorrar.className = "gasto-borrar-api";
+
+        //let borrarGastoApi = borrarHandle(gasto);
+        
+        //botonBorrar.addEventListener("click", borrarGasto);
+        divPrincipal.append(botonBorrarApi);
+
         let botonEditarFormulario = document.createElement("button");
         botonEditarFormulario.textContent = "Editar (formulario)";
         botonEditarFormulario.className = "gasto-editar-formulario";
