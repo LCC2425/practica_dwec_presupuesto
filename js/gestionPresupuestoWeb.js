@@ -66,12 +66,12 @@ export function mostrarGastoWeb(idElemento, gasto) {
         divPrincipal.append(botonBorrar);
 
         let botonBorrarApi = document.createElement("button");
-        botonBorrar.textContent = "Borrar (API)";
-        botonBorrar.className = "gasto-borrar-api";
+        botonBorrarApi.textContent = "Borrar (API)";
+        botonBorrarApi.className = "gasto-borrar-api";
 
-        //let borrarGastoApi = borrarHandle(gasto);
+        let manejadorBorrarGastoApi = borrarGastoApi(gasto);
         
-        //botonBorrar.addEventListener("click", borrarGasto);
+        botonBorrarApi.addEventListener("click", manejadorBorrarGastoApi);
         divPrincipal.append(botonBorrarApi);
 
         let botonEditarFormulario = document.createElement("button");
@@ -87,6 +87,7 @@ export function mostrarGastoWeb(idElemento, gasto) {
         elementoSeleccionado.append(divPrincipal);
     }
 }
+
 export function mostrarGastosAgrupadosWeb(idElemento, agrup, periodo){
     let elementoSeleccionado = document.getElementById(idElemento);
 
@@ -439,6 +440,19 @@ async function cargarGastosApi() {
 
     repintar();
 }
+
+function borrarGastoApi(gasto) {
+    return async function() {
+    let nombreUsuario = document.getElementById("nombre_usuario").value;
+
+    let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario + "/gastos/" + gasto.id;
+
+    await fetch(url, { method: "DELETE" });
+
+    cargarGastosApi();
+    }
+}
+
 
 
 let botonPresupuesto = document.getElementById("actualizarpresupuesto");
