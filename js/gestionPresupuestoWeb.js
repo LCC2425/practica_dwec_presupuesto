@@ -449,3 +449,6 @@ botonGuardar.addEventListener("click", guardarGastosWeb);
 
 let botonCargar = document.getElementById("cargar-gastos");
 botonCargar.addEventListener("click", cargarGastosWeb);
+
+let botonCargarApi = document.getElementById("cargar-gastos-apis");
+botonCargarApi.addEventListener("click", cargarGastosApi);
