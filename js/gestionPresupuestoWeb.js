@@ -266,7 +266,7 @@ function nuevoGastoWebFormulario(){
     formulario.querySelector("button.cancelar").addEventListener("click", borrarFormulario);
 
     let botonEnviarApi = formulario.querySelector(".gasto-enviar-api");
-botonEnviarApi.addEventListener("click", async function(event) {
+    botonEnviarApi.addEventListener("click", async function(event) {
         event.preventDefault();
 
         let nombreUsuario = document.getElementById("nombre_usuario").value;
@@ -509,17 +509,13 @@ async function cargarGastosApi() {
     let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario;
 
     let respuesta = await fetch(url);
+    let gastos = [];
 
-    if(!respuesta.ok){
-    let gastos = await respuesta.json();
+    if(respuesta.ok){
+    gastos = await respuesta.json();
     }
-    let gastosRehidratados = gastos.map(g => {
-        let gasto = new gestionPresupuesto.CrearGasto();
-        Object.assign(gasto, g);
-        return gasto;
-    });
     
-    gestionPresupuesto.cargarGastos(gastosRehidratados);
+    gestionPresupuesto.cargarGastos(gastos);
 
     repintar();
 }
