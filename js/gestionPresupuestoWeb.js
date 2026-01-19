@@ -65,6 +65,9 @@ export function mostrarGastoWeb(idElemento, gasto) {
         botonBorrar.addEventListener("click", borrarGasto);
         divPrincipal.append(botonBorrar);
 
+
+        if (gasto.gastoId !== undefined) {
+
         let botonBorrarApi = document.createElement("button");
         botonBorrarApi.textContent = "Borrar (API)";
         botonBorrarApi.className = "gasto-borrar-api";
@@ -74,7 +77,7 @@ export function mostrarGastoWeb(idElemento, gasto) {
 
             let nombreUsuario = document.getElementById("nombre_usuario").value;
 
-            let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario  + "/" + gasto.id;
+            let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/" + nombreUsuario  + "/" + gasto.gastoId;
 
             await fetch(url, { method: "DELETE" });
 
@@ -82,7 +85,7 @@ export function mostrarGastoWeb(idElemento, gasto) {
         });
 
         divPrincipal.append(botonBorrarApi);
-
+    }
         let botonEditarFormulario = document.createElement("button");
         botonEditarFormulario.textContent = "Editar (formulario)";
         botonEditarFormulario.className = "gasto-editar-formulario";
@@ -380,7 +383,7 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
 
         let nombreUsuario = document.getElementById("nombre_usuario").value;
 
-        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/"+ nombreUsuario  + "/" + this.gastoActual.id;
+        let url = "https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/"+ nombreUsuario  + "/" + this.gastoActual.gastoId;
 
         let datos = {
             descripcion: formulario.descripcion.value,
@@ -408,7 +411,7 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
     formulario.addEventListener("submit", editarGasto);
     formulario.querySelector("button.cancelar").addEventListener("click", borrarFormulario);
     formulario.querySelector(".gasto-enviar-api").addEventListener("click", editarGastoApi);
-
+    
 
     let formularioExistente = divPrincipal.querySelector("form");
     if (formularioExistente){
