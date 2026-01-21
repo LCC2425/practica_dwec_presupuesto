@@ -219,13 +219,13 @@ function repintar(){
         mostrarGastoWeb("listado-gastos-completo",gasto);
     }
 
-    let gastosDia = agruparGastos("dia");
+    let gastosDia = gestionPresupuesto.agruparGastos("dia");
     mostrarGastosAgrupadosWeb("agrupacion-dia", gastosDia, "dia");
 
-    let gastosMes = agruparGastos("mes");
+    let gastosMes = gestionPresupuesto.agruparGastos("mes");
     mostrarGastosAgrupadosWeb("agrupacion-mes", gastosMes, "mes");
 
-    let gastosAnyo = agruparGastos("anyo");
+    let gastosAnyo = gestionPresupuesto.agruparGastos("anyo");
     mostrarGastosAgrupadosWeb("agrupacion-anyo", gastosAnyo, "anyo");
 
 }
