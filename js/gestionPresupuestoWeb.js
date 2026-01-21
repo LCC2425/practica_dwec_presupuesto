@@ -24,7 +24,7 @@ export function mostrarGastoWeb(idElemento, gasto) {
 
         let divFecha = document.createElement("div");
         divFecha.className = "gasto-fecha";
-        divFecha.textContent = gasto.fecha;
+        divFecha.textContent = new Date(gasto.fecha).toISOString().slice(0, 10);;
         divPrincipal.append(divFecha);
 
         let divValor = document.createElement("div");
@@ -134,7 +134,7 @@ export function mostrarGastosAgrupadosWeb(idElemento, agrup, periodo){
 
         let spanGastoActual = document.createElement("span");
         spanGastoActual.className = "agrupacion-dato-clave";
-        spanGastoActual.textContent = gastoActual;
+        spanGastoActual.textContent = gastoActual  + " → ";
 
         let spanValor = document.createElement("span");
         spanValor.className = "agrupacion-dato-valor";
@@ -272,11 +272,11 @@ function editarHandle(gasto){
     let nuevoValorNum = Number(nuevoValor);
     this.gastoActual.actualizarValor(nuevoValorNum);
 
-    let nuevaFecha = prompt("Edita la Fecha actual en formato internacional (yyyy-mm-dd):", this.gastoActual.fecha);
+    let nuevaFecha = prompt("Edita la Fecha actual en formato internacional (yyyy-mm-dd):", new Date(this.gastoActual.fecha).toISOString().slice(0, 10));
     if(nuevaFecha === null){
-        nuevaFecha = this.gastoActual.fecha;
+        nuevaFecha = new Date(this.gastoActual.fecha).toISOString().slice(0, 10);
     }
-    this.gastoActual.actualizarFecha(nuevaFecha);
+    this.gastoActual.fecha = new Date(nuevaFecha).getTime();
 
     let nuevasEtiquetas = prompt("Edita las Etiquetas actuales para el gasto separadas por comas. Por ejemplo: Etiqueta1,Etiquetados,etc...",this.gastoActual.etiquetas);
     if(nuevasEtiquetas === null){
@@ -394,7 +394,7 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
 
             descripcionAEditar.value = gasto.descripcion; 
             valorAEditar.value = gasto.valor; 
-            fechaAEditar.value = gasto.fecha; 
+            fechaAEditar.value = new Date(gasto.fecha).toISOString().slice(0, 10);
             etiquetasAEditar.value = gasto.etiquetas.join(","); 
         }
     };
@@ -421,10 +421,13 @@ function editarHandleFormulario(gasto, botonEditarElFormulario, divPrincipal) {
             this.gastoActual.actualizarValor(Number(nuevoValor)); 
 
             let nuevaFecha = formulario.querySelector("input[name=fecha]").value; 
-            if(nuevaFecha === "") {
-                nuevaFecha = this.gastoActual.fecha; 
+            if (nuevaFecha !== "") {
+                this.gastoActual.fecha = new Date(nuevaFecha).getTime();
+            } else {
+                this.gastoActual.fecha = this.gastoActual.fecha;
             }
-            this.gastoActual.actualizarFecha(nuevaFecha); 
+            
+ 
 
             let nuevasEtiquetas = formulario.querySelector("input[name=etiquetas]").value;
             if(nuevasEtiquetas === ""){
